@@ -4,6 +4,10 @@ from torchvision import transforms
 from PIL import Image
 from torchvision import models
 
+"""
+File to predict kidney stone based on image
+"""
+
 # Load trained model
 model = models.resnet18(pretrained=False)
 num_ftrs = model.fc.in_features
@@ -41,7 +45,7 @@ def predict_image(image_path):
         class_names = ["Normal", "Stone"]
         return class_names[predicted.item()]
 
-# Example usage
+# Example usage, assumes we have image file saved. need to change this to use uploaded image
 image_path = "test.jpg"
 prediction = predict_image(image_path)
 print(f"Prediction: {prediction}")
