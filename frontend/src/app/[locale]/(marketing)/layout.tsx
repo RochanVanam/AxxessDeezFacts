@@ -1,8 +1,8 @@
-import { DemoBanner } from "@/components/DemoBanner";
-import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+// import { DemoBanner } from "@/components/DemoBanner";
+// import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { BaseTemplate } from "@/templates/BaseTemplate";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Link from "next/link";
+// import Link from "next/link";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export default async function Layout(props: {
 
   return (
     <>
-      <DemoBanner />
+      {/* <DemoBanner /> */}
       <BaseTemplate
         leftNav={<> {/* Nav bar removed */}</>}
       >
