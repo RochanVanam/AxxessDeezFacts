@@ -1,4 +1,3 @@
-import { Sponsors } from '@/components/Sponsors';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 type IIndexProps = {
@@ -21,14 +20,27 @@ export async function generateMetadata(props: IIndexProps) {
 export default async function Index(props: IIndexProps) {
   const { locale } = await props.params;
   setRequestLocale(locale);
-  const t = await getTranslations({
-    locale,
-    namespace: 'Index',
-  });
+  // const t = await getTranslations({
+  //   locale,
+  //   namespace: 'Index',
+  // });
 
   return (
     <>
-      <p>
+      {/* <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" >Upload file</label> */}
+      <input
+        type="file"
+        className="text-sm text-stone-500
+        file:mr-5 file:py-1 file:px-3 file:border-[1px]
+        file:text-xs file:font-medium
+        file:bg-stone-50 file:text-stone-700
+        hover:file:cursor-pointer hover:file:bg-blue-50
+        hover:file:text-blue-700"
+      />
+      <br />
+      <br />
+      <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Submit File</button>
+      {/* <p>
         {`Follow `}
         <a
           className="text-blue-700 hover:border-b-2 hover:border-blue-700"
@@ -114,7 +126,7 @@ export default async function Index(props: IIndexProps) {
         recommend trying them out.
       </p>
       <h2 className="mt-5 text-2xl font-bold">{t('sponsors_title')}</h2>
-      <Sponsors />
+      <Sponsors /> */}
     </>
   );
 };
