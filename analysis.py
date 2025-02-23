@@ -27,13 +27,6 @@ medical_record = {
         "Current Medications": ["Metformin (500 mg, twice daily)", "Lisinopril (10 mg, once daily)"],
         "Past Medications": []
     },
-    "Treatment History": {
-        "Chief Complaint": "Fatigue and shortness of breath during physical activity.",
-        "History of Present Illness": (
-            "Symptoms began two months ago and have progressively worsened. "
-            "No associated chest pain or dizziness."
-        )
-    },
     "Diagnostic Records": {
         "Lab Results (February 15, 2025)": {
             "Hemoglobin A1c": "7.2% (elevated)",
@@ -203,13 +196,6 @@ myMedicalRecord = {
         "Current Medications": ["Albuterol inhaler (as needed)", "Atorvastatin (20 mg, once daily)"],
         "Past Medications": ["Montelukast (discontinued in 2018)"]
     },
-    "Treatment History": {
-        "Chief Complaint": "Intermittent wheezing and chest tightness, especially during exercise.",
-        "History of Present Illness": (
-            "Symptoms have been present for the past three weeks and are triggered by physical activity. "
-            "No associated fever or persistent cough."
-        )
-    },
     "Diagnostic Records": {
         "Lab Results (February 20, 2025)": {
             "Total Cholesterol": "220 mg/dL (elevated)",
@@ -256,7 +242,7 @@ messages = [
     {
         "role": "system",
         "content": (
-            f"You are an artificial intelligence assistant which is supposed to detect early-stage diseases, conditions, and health issues. Given an individual's medical record, you are supposed to generate health plan which consists of personalized medication recommendations/reminders, exercise, and diet. Here is an example medical record for context: {medical_record}. Here is an example health plan: {health_plan}"
+            f"You are an artificial intelligence assistant which is supposed to detect early-stage diseases, conditions, and health issues. Given an individual's medical record, you are supposed to generate health plan which consists of personalized medication recommendations/reminders, exercise, and diet. Here is an example medical record for context: {medical_record}. Here is an example health plan: {health_plan}. Do not give sources (meaning don't put numbers like [1] or [5])"
         ),
     },
     {
