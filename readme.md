@@ -3,6 +3,7 @@
 Welcome to **AxxessDeezFacts**, a next-generation **healthcare web and mobile application** designed to streamline **documentation, inventory management, and patient monitoring**. This innovative project was developed for the **Axxess Hackathon** to bring efficiency and intelligence to home healthcare. 🏠❤️
 
 ---
+![Screenshot 2025-02-23 101650](https://github.com/user-attachments/assets/d3319bc5-2ecf-49fb-93b9-bfc6f7af2f42)
 
 ## 🌟 Key Features
 
