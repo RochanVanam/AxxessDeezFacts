@@ -1,0 +1,7 @@
+{
+  "name": "ai",
+  "version": "1.0.2",
+  "description": "Integrates with OpenAI/Gemini to provide various AI-driven functionalities",
+  "dependencies": ["openai", "@google/generative-ai", "gemini-zod"],
+  "keywords": ["ai", "openai", "gemini"]
+}

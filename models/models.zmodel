@@ -1,0 +1,182 @@
+enum UserStatus {
+    INVITED
+    VERIFIED
+}
+
+model User {
+    id                String             @id @default(uuid())
+    name              String?
+    email             String?            @unique
+    pictureUrl        String?            @default('https://i.imgur.com/ZdJSK3Y.jpeg')
+    tokenInvitation   String?
+
+    stripeCustomerId  String?
+
+    status            UserStatus         @default(VERIFIED)
+
+    // this is the role of the user for the application
+    globalRole        String             @default('USER')
+    password          String?            @password @omit
+    createdAt         DateTime           @default(now())
+    updatedAt         DateTime           @updatedAt @default(now())
+
+    organizationRoles OrganizationRole[]
+
+    pwaSubscriptions  PwaSubscription[]  @relation("user")
+
+    healthLogs        HealthLog[]        @relation("user")
+
+    @@auth()
+    @@allow("all", auth().id == this.id)
+    @@allow('all', auth().globalRole == 'ADMIN')
+
+    //we only allow that user to register if they don't create an admin role
+    @@allow("create", globalRole != 'ADMIN')
+    @@allow("read", true)
+}
+
+model Patient {
+
+    id             String         @id @default(uuid())
+    firstName      String
+    lastName       String
+    dateOfBirth    String
+    gender         String
+    phone          String?
+    email          String?
+    address        String?
+
+    organizationId String
+    organization   Organization?  @relation(fields: [organizationId], references: [id], name: "organization")
+
+    prescriptions  Prescription[] @relation("patient")
+    healthLogs     HealthLog[]    @relation("patient")
+    height         String
+    weight         String
+    conditions     String
+    createdAt      DateTime       @default(now())
+    updatedAt      DateTime       @updatedAt @default(now())
+    @@allow("all", true)
+}
+
+model Medication {
+
+    id                  String            @id @default(uuid())
+    name                String
+    description         String?
+    currentStock        Float
+    reorderThreshold    Float
+    recommendedQuantity Float
+
+    organizationId      String
+    organization        Organization?     @relation(fields: [organizationId], references: [id], name: "organization")
+
+    prescriptions       Prescription[]    @relation("medication")
+    medicationOrders    MedicationOrder[] @relation("medication")
+    createdAt           DateTime          @default(now())
+    updatedAt           DateTime          @updatedAt @default(now())
+    @@allow("all", true)
+}
+
+model Prescription {
+
+    id           String      @id @default(uuid())
+    dosage       String
+    frequency    String
+    startDate    String
+    endDate      String?
+    status       String
+
+    patientId    String
+    patient      Patient?    @relation(fields: [patientId], references: [id], name: "patient")
+    medicationId String
+    medication   Medication? @relation(fields: [medicationId], references: [id], name: "medication")
+
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime    @updatedAt @default(now())
+    @@allow("all", true)
+}
+
+model MedicationOrder {
+
+    id             String        @id @default(uuid())
+    quantity       Float
+    status         String
+
+    medicationId   String
+    medication     Medication?   @relation(fields: [medicationId], references: [id], name: "medication")
+    organizationId String
+    organization   Organization? @relation(fields: [organizationId], references: [id], name: "organization")
+
+    createdAt      DateTime      @default(now())
+    updatedAt      DateTime      @updatedAt @default(now())
+    @@allow("all", true)
+}
+
+model HealthLog {
+
+    id        String   @id @default(uuid())
+    type      String
+    notes     String?
+    date      String
+
+    patientId String
+    patient   Patient? @relation(fields: [patientId], references: [id], name: "patient")
+    userId    String
+    user      User?    @relation(fields: [userId], references: [id], name: "user")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now())
+    @@allow("all", true)
+}
+
+model Organization {
+    id               String             @id @default(uuid())
+    name             String
+    pictureUrl       String?            @default('https://i.imgur.com/BgkFiid.jpeg')
+
+    stripeCustomerId String?
+
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt @default(now())
+    roles            OrganizationRole[]
+
+    patients         Patient[]          @relation("organization")
+    medications      Medication[]       @relation("organization")
+    medicationOrders MedicationOrder[]  @relation("organization")
+
+    @@allow('all', auth().globalRole == 'ADMIN')
+    @@allow('all', roles?[user == auth() && name == 'owner'])
+    @@allow('read', roles?[user == auth()])
+}
+
+model OrganizationRole {
+    id             String       @id @default(uuid())
+    name           String
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt @default(now())
+
+    userId         String       @default(auth().id)
+    user           User         @relation(fields: [userId], references: [id])
+    organizationId String
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+    @@allow('all', auth().globalRole == 'ADMIN')
+    @@allow('all', organization.roles?[user == auth() && name == 'owner'])
+    @@allow('create', organization.roles?[user == auth()] && name != 'owner')
+    @@allow('read', organization.roles?[user == auth()])
+    @@allow('delete', auth() == user)
+}
+
+model PwaSubscription {
+    id        String   @id @default(uuid())
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now())
+
+    userId    String   @default(auth().id)
+    user      User     @relation(fields: [userId], references: [id], name: 'user')
+
+    @@allow("all", true)
+}
+
